@@ -6,20 +6,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <script src="../day01/js/vue.js"></script>
+    <!-- <script src="../day01/js/vue.js"></script> -->
+    <script src="https://cdn.bootcss.com/vue/2.6.10/vue.js"></script>
     <style>
         ul,
-        li {
+        li,
+        p {
             margin: 0;
             padding: 0;
             list-style: none;
         }
 
+        li,
         p {
-            text-decoration: none;
-            color: #222;
+            padding: 10px 0;
+        }
+
+        #box {
+            width: 400px;
+            margin: 200px auto;
+            border: 1px solid #f0f0f0;
+            /* padding: 50px; */
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .content {
             display: inline-block;
-            width: 200px;
         }
 
         .unfinsh {
@@ -30,35 +43,45 @@
         .jujiao {
             border: 2px solid #232323;
         }
-
-        input[disabled] {
+        /* input {
             border: 0;
-            background-color: #222;
+        }
+        input:first-child{
+            border: 1px solid #222;
+        } */
+        input[type='checkbox']{
+            display: none;
         }
     </style>
 </head>
 
 <body>
     <div id="box">
-        <input type="text" @key.enter="add">
+        <p>
+            <span @click="toggle">全选</span><input type="text" @key.enter="add">
+        </p>
         <ul>
-            <li v-for="(item,index) in msg">
+            <li v-for="(item,index) in filtermsg">
                 <input type="checkbox" :id="'a' + item.id" v-model="item.select">
                 <label :for="'a'+item.id">{{item.select}}</label>
-                <div @dblclick="fn(index)">
-                    <input type="text" :readonly="item.genggai? false :'readonly'" id="item.id" v-focus v-model="item.text">
+                <div @dblclick="fn(index)" class="content">
+                    <input type="text" :readonly="item.genggai? false :'readonly'" id="item.id" v-focus
+                        v-model="item.text">
                 </div>
             </li>
         </ul>
-        <button></button>
-        <button></button>
-        <button></button>
+        <p>
+            <span>还有{{unselnum}}未完成</span>
+            <button @click="change='all'">全部</button>
+            <button @click="change='select'">已完成</button>
+            <button @click="change='unsel'">未完成</button>
+        </p>
     </div>
 </body>
 <script>
 
-    Vue.directive('focus',{
-        inserted:function(el){
+    Vue.directive('focus', {
+        inserted: function (el) {
             el.focus();
         }
     })
@@ -66,24 +89,24 @@
     var vm = new Vue({
         el: "#box",
         data: {
+            change: 'all',
             msg: [
                 {
                     id: Date.now(),
                     text: "www",
                     select: false,
-                    genggai: false,
-                    jujiao: false
+                    genggai: false
                 },
                 {
                     id: Date.now() + 1,
                     text: "aaa",
                     select: false,
-                    genggai: false,
-                    jujiao: false
+                    genggai: false
                 }
 
             ]
         },
+        //事件
         methods: {
             fn(index) {
                 if (this.msg[index].select) {
@@ -93,16 +116,34 @@
                     this.msg[index].jujiao = true;
                 }
             },
-            blu(index) {
-                this.msg[index].genggai = false;
-                this.msg[index].jujiao = false;
-            }
+            toggle(){
+                this.msg.forEach(item=>{
+                    item.select = true;
+                })
+            },
+            add()
         },
-        directive:{
-            focus:{
-                inserted:function(el){
+        directive: {
+            focus: {
+                inserted: function (el) {
                     el.focus();
                 }
+            }
+        },
+        computed: {
+            filtermsg() {
+                return this.msg.filter((item) => {
+                    if (this.change == 'all') {
+                        return true;
+                    } else if (this.change == 'select') {
+                        return item.select;
+                    } else if (this.change == 'unsel') {
+                        return !item.select;
+                    }
+                })
+            },
+            unselnum() {
+                return this.msg.filter((item) => !item.select).length;
             }
         }
     })
