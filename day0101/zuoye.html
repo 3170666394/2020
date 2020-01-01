@@ -28,7 +28,6 @@
             border: 1px solid #f0f0f0;
             /* padding: 50px; */
             box-sizing: border-box;
-            text-align: center;
         }
 
         .content {
@@ -43,14 +42,30 @@
         .jujiao {
             border: 2px solid #232323;
         }
+
         /* input {
             border: 0;
         }
         input:first-child{
             border: 1px solid #222;
         } */
-        input[type='checkbox']{
+        input[type='checkbox'] {
             display: none;
+        }
+        input:first-child{
+            border: 0;
+        }
+        #box .hasborder{
+            border: 1px solid #ccc;
+        }
+
+        .content span {
+            display: none;
+            cursor: pointer;
+        }
+
+        .content:hover span {
+            display: inline-block;
         }
     </style>
 </head>
@@ -58,15 +73,16 @@
 <body>
     <div id="box">
         <p>
-            <span @click="toggle">全选</span><input type="text" @key.enter="add">
+            <span @click="toggle">全选</span><input type="text" @keyup.enter="add()" v-model="str">
         </p>
         <ul>
             <li v-for="(item,index) in filtermsg">
                 <input type="checkbox" :id="'a' + item.id" v-model="item.select">
                 <label :for="'a'+item.id">{{item.select}}</label>
-                <div @dblclick="fn(index)" class="content">
+                <div @dblclick.prevent="fn(index)" class="content">
                     <input type="text" :readonly="item.genggai? false :'readonly'" id="item.id" v-focus
-                        v-model="item.text">
+                     :value="item.text"   @keyup="contentupdata($event,item,index)" :class="{hasborder:item.genggai}" @blur="lostfocus(index)">
+                    <span @click="deletearr(item)">×</span>
                 </div>
             </li>
         </ul>
@@ -75,6 +91,7 @@
             <button @click="change='all'">全部</button>
             <button @click="change='select'">已完成</button>
             <button @click="change='unsel'">未完成</button>
+            <a href="javascript:;" :style="judge?'':xiaosi" @click="deletecheck">清空所有</a>
         </p>
     </div>
 </body>
@@ -89,6 +106,10 @@
     var vm = new Vue({
         el: "#box",
         data: {
+            str: '',
+            xiaosi: {
+                display: 'none',
+            },
             change: 'all',
             msg: [
                 {
@@ -116,12 +137,49 @@
                     this.msg[index].jujiao = true;
                 }
             },
-            toggle(){
-                this.msg.forEach(item=>{
+            toggle() {
+                this.msg.forEach(item => {
                     item.select = true;
                 })
             },
-            add()
+            add() {
+                if (!this.str) {
+                    return;
+                }
+                this.msg.push({
+                    id: Date.now() + 1,
+                    text: this.str,
+                    select: false,
+                    genggai: false
+                })
+                this.str = "";
+            },
+            deletecheck() {
+                this.msg = this.msg.filter(item => {
+                    return !item.select;
+                })
+            },
+            deletearr(item) {
+                this.msg = this.msg.filter(el => {
+                    if (item.id != el.id) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                })
+            },
+            contentupdata(event, item, index) {
+                if (event.keyCode == 13) {
+                    this.msg[index].text = event.target.value;
+                    this.msg[index].genggai = false;
+                } else if (event.keyCode == 27) {
+                    this.msg[index].text = this.msg[index].text;
+                    this.msg[index].genggai = false;
+                }
+            },
+            lostfocus(index){
+                this.msg[index].genggai = false;
+            }
         },
         directive: {
             focus: {
@@ -144,6 +202,11 @@
             },
             unselnum() {
                 return this.msg.filter((item) => !item.select).length;
+            },
+            judge() {
+                return this.msg.some(item => {
+                    return item.select;
+                })
             }
         }
     })
