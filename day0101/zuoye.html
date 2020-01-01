@@ -33,9 +33,12 @@
         }
 
         .content {
+            margin-left: 10px;
             display: inline-block;
         }
-
+        .currunt{
+            color: seagreen;
+        }
         .unfinsh {
             text-decoration: line-through;
             color: #ccc;
@@ -78,7 +81,7 @@
         <ul>
             <li v-for="(item,index) in filtermsg">
                 <input type="checkbox" :id="'a' + item.id" v-model="item.select">
-                <label :for="'a'+item.id">{{item.select}}</label>
+                <label :for="'a'+item.id" :class="['iconfont','icon-zhengque',{currunt:item.select}]"></label>
                 <div @dblclick.prevent="fn(index)" class="content">
                     <input type="text" :readonly="item.genggai? false :'readonly'" id="item.id" v-focus
                      :value="item.text"   @keyup="contentupdata($event,item,index)" :class="[{hasborder:item.genggai},{deleteline:item.select}]" @blur="lostfocus(index)">
