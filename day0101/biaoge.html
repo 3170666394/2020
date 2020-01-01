@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../day01/js/vue.js"></script>
+    <style>
+        .box{
+            border: 1px solid #222;
+            width: 100px;
+            height: 100px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <table class="box" rules="all">
+        <tr v-for="n in tr">
+            <td v-for="m
+             in td"  v-if="(n-1)*td + m < tr*td" :colspan="(n-1)*td + m === tr*td-1? 2: ''">
+             {{(n-1)*td + m}}</td>
+        </tr>
+    </table>
+</body>
+<script>
+    var vm = new Vue({
+        el:".box",
+        data:{
+            tr:3,
+            td:3
+        }
+    })
+</script>
+</html>

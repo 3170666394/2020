@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../day01/js/vue.js"></script>
+    <style>
+        ul,
+        li {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        p {
+            text-decoration: none;
+            color: #222;
+            display: inline-block;
+            width: 200px;
+        }
+
+        .unfinsh {
+            text-decoration: line-through;
+            color: #ccc;
+        }
+
+        .jujiao {
+            border: 2px solid #232323;
+        }
+
+        input[disabled] {
+            border: 0;
+            background-color: #222;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="box">
+        <input type="text" @key.enter="add">
+        <ul>
+            <li v-for="(item,index) in msg">
+                <input type="checkbox" :id="'a' + item.id" v-model="item.select">
+                <label :for="'a'+item.id">{{item.select}}</label>
+                <div @dblclick="fn(index)">
+                    <input type="text" :readonly="item.genggai? false :'readonly'" id="item.id" v-focus v-model="item.text">
+                </div>
+            </li>
+        </ul>
+        <button></button>
+        <button></button>
+        <button></button>
+    </div>
+</body>
+<script>
+
+    Vue.directive('focus',{
+        inserted:function(el){
+            el.focus();
+        }
+    })
+
+    var vm = new Vue({
+        el: "#box",
+        data: {
+            msg: [
+                {
+                    id: Date.now(),
+                    text: "www",
+                    select: false,
+                    genggai: false,
+                    jujiao: false
+                },
+                {
+                    id: Date.now() + 1,
+                    text: "aaa",
+                    select: false,
+                    genggai: false,
+                    jujiao: false
+                }
+
+            ]
+        },
+        methods: {
+            fn(index) {
+                if (this.msg[index].select) {
+                    return
+                } else {
+                    this.msg[index].genggai = true;
+                    this.msg[index].jujiao = true;
+                }
+            },
+            blu(index) {
+                this.msg[index].genggai = false;
+                this.msg[index].jujiao = false;
+            }
+        },
+        directive:{
+            focus:{
+                inserted:function(el){
+                    el.focus();
+                }
+            }
+        }
+    })
+</script>
+
+</html>
