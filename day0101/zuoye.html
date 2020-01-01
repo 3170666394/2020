@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <!-- <script src="../day01/js/vue.js"></script> -->
     <script src="https://cdn.bootcss.com/vue/2.6.10/vue.js"></script>
+    <link rel="stylesheet" href="./font_pxy1n5ws3x/iconfont.css">
     <style>
         ul,
         li,
@@ -26,8 +26,10 @@
             width: 400px;
             margin: 200px auto;
             border: 1px solid #f0f0f0;
-            /* padding: 50px; */
             box-sizing: border-box;
+        }
+        p span{
+            margin-right: 10px;
         }
 
         .content {
@@ -38,22 +40,20 @@
             text-decoration: line-through;
             color: #ccc;
         }
+        #box .deleteline{
+            text-decoration: line-through;
+            color: #ccc;
+        }
 
         .jujiao {
             border: 2px solid #232323;
         }
-
-        /* input {
-            border: 0;
-        }
-        input:first-child{
-            border: 1px solid #222;
-        } */
         input[type='checkbox'] {
             display: none;
         }
         input:first-child{
             border: 0;
+            color: #222;
         }
         #box .hasborder{
             border: 1px solid #ccc;
@@ -81,7 +81,7 @@
                 <label :for="'a'+item.id">{{item.select}}</label>
                 <div @dblclick.prevent="fn(index)" class="content">
                     <input type="text" :readonly="item.genggai? false :'readonly'" id="item.id" v-focus
-                     :value="item.text"   @keyup="contentupdata($event,item,index)" :class="{hasborder:item.genggai}" @blur="lostfocus(index)">
+                     :value="item.text"   @keyup="contentupdata($event,item,index)" :class="[{hasborder:item.genggai},{deleteline:item.select}]" @blur="lostfocus(index)">
                     <span @click="deletearr(item)">×</span>
                 </div>
             </li>
