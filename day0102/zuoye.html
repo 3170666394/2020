@@ -17,7 +17,7 @@
 <script>
     var imgs = {
         template: `
-        <div @mouseleave="judge?leave:''">
+        <div @mouseleave="judge?leave():''">
             <img :src="num<oldindex?'on.png':'off.png'"  v-for="num in 5" @mouseenter="judge?enter(num):''" @click="change(num)">
         </div>
         `,
