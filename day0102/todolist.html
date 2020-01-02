@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="box">
+        <Txt @msg="active"></Txt>
+        <List :list="list"></List>
+    </div>
+</body>
+<script>
+    var Txt = {
+        template: `<input type="text" v-model="str" @keyup.enter="add" >`,
+        data(){
+            return {
+                str:''
+            }
+        },
+        methods:{
+            add(){
+                
+                this.$emit("msg",this.str)
+                this.str = ""
+            }
+        }
+    }
+
+    var List = {
+        template:`
+        <ul>
+            <li v-for="item in list" v-text="item"></li>
+        </ul>`,
+        props:["list"]
+    }
+
+    new Vue({
+        el:"#box",
+        data:{
+            list:[]
+        },
+        methods:{
+            active(str){
+                console.log(str)
+                this.list.push(str);
+            }
+        },
+        components:{
+            Txt,
+            List
+        }
+    })
+</script>
+</html>

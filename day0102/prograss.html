@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="box">
+        <com v-for="(item,index) in num" :nu="item" :name="name[index]"></com>
+    </div>
+</body>
+
+<script>
+    // var num = [Math.floor(Math.random()*20+10),Math.floor(Math.random()*20+10),Math.floor(Math.random()*20+10),Math.floor(Math.random()*20+10)]
+    var com = {
+        template:`
+        <div class="progress">
+            <div class="progress-bar" :style="{ width : n+ '%' }">
+                {{n}}% 
+            </div>
+        </div>
+        `,
+        data(){
+            return {n : this.nu};
+        },
+        props:['nu']
+    }
+    new Vue({
+        el:"#box",
+        data:{
+            num:[Math.floor(Math.random()*20+10),Math.floor(Math.random()*20+10),Math.floor(Math.random()*20+10),Math.floor(Math.random()*20+10)],
+            name:['one','two','three','four']
+        },
+        components:{
+            com
+        }
+    })
+</script>
+
+</html>

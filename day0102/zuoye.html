@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="box">
+        <imgs></imgs>
+    </div>
+</body>
+<script>
+    var imgs = {
+        template: `
+        <div @mouseleave="judge?leave:''">
+            <img :src="num<oldindex?'on.png':'off.png'"  v-for="num in 5" @mouseenter="judge?enter(num):''" @click="change(num)">
+        </div>
+        `,
+        data() {
+            return {
+                oldindex: -1,
+                judge:true
+            }
+        },
+        methods:{
+            enter(num){
+                this.oldindex = num+1;
+            },
+            leave(){
+                this.oldindex = -1;
+            },
+            change(num){
+                this.judge = false;
+                this.oldindex = num+1;
+            }
+        }
+
+    }
+
+    new Vue({
+        el: "#box",
+        components:{
+            imgs
+        }
+    })
+</script>
+
+</html>
