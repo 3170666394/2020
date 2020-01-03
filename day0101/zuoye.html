@@ -99,7 +99,6 @@
     </div>
 </body>
 <script>
-
     Vue.directive('focus', {
         inserted: function (el) {
             el.focus();
@@ -117,13 +116,13 @@
             msg: [
                 {
                     id: Date.now(),
-                    text: "www",
+                    text: 'aaa',
                     select: false,
                     genggai: false
                 },
                 {
                     id: Date.now() + 1,
-                    text: "aaa",
+                    text: 'www',
                     select: false,
                     genggai: false
                 }
@@ -151,7 +150,7 @@
                 }
                 this.msg.push({
                     id: Date.now() + 1,
-                    text: this.str,
+                    text:this.str,
                     select: false,
                     genggai: false
                 })

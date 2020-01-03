@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="box">
+        <com ref="zj">
+            <template #left>
+                <span>请输入</span>
+            </template>
+            <template #btn="{d}">
+                <button @click="add(d)">添加</button>
+            </template>
+        </com>
+        <ul>
+            <li v-for="item in list">{{item}}</li>
+        </ul>
+    </div>
+</body>
+<script>
+    let com = {
+        template: `<div>
+            <slot name="left"></slot>
+            <input type="text" v-model="d" @keyup.enter="$parent.add(d)">
+            <slot name="btn" :d="d"></slot>
+            </div>`,
+        data() {
+            return {
+                d: ''
+            }
+        }
+    }
+    new Vue({
+        el: "#box",
+        components: {
+            com
+        },
+        data: {
+            list: []
+        },
+        methods: {
+            add(v) {
+                this.list.push(v);
+                this.$refs.zj.d = "";
+            }
+        }
+    })
+</script>
+
+</html>

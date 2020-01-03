@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.bootcss.com/vue/2.6.10/vue.js"></script>
+    <link rel="stylesheet" href="./font_pxy1n5ws3x/iconfont.css">
+    <style>
+        ul,
+        li,
+        p {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        li,
+        p {
+            padding: 10px 0;
+        }
+
+        #box {
+            width: 400px;
+            margin: 200px auto;
+            border: 1px solid #f0f0f0;
+            box-sizing: border-box;
+        }
+
+        p span {
+            margin-right: 10px;
+        }
+
+        .content {
+            margin-left: 10px;
+            display: inline-block;
+        }
+
+        .currunt {
+            color: seagreen;
+        }
+
+        .unfinsh {
+            text-decoration: line-through;
+            color: #ccc;
+        }
+
+        #box .deleteline {
+            text-decoration: line-through;
+            color: #ccc;
+        }
+
+        .jujiao {
+            border: 2px solid #232323;
+        }
+
+        input[type='checkbox'] {
+            display: none;
+        }
+
+        input:first-child {
+            border: 0;
+            color: #222;
+        }
+
+        #box .hasborder {
+            border: 1px solid #ccc;
+        }
+
+        .content span {
+            display: none;
+            cursor: pointer;
+        }
+
+        .content:hover span {
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="box">
+        <p>
+            <span @click="toggle">全选</span><input type="text" @keyup.enter="add()" v-model="str">
+        </p>
+        <ul>
+            <li v-for="(item,index) in filtermsg">
+                <input type="checkbox" :id="'a' + item.id" v-model="item.select">
+                <label :for="'a'+item.id" :class="['iconfont','icon-zhengque',{currunt:item.select}]"></label>
+                <div @dblclick.prevent="fn(index)" class="content">
+                    <input type="text" :readonly="item.genggai? false :'readonly'" id="item.id" v-focus
+                        :value="item.text" @keyup="contentupdata($event,item,index)"
+                        :class="[{hasborder:item.genggai},{deleteline:item.select}]" @blur="lostfocus(index)">
+                    <span @click="deletearr(item)">×</span>
+                </div>
+            </li>
+        </ul>
+        <p>
+            <span>还有{{unselnum}}未完成</span>
+            <button @click="change='all'">全部</button>
+            <button @click="change='select'">已完成</button>
+            <button @click="change='unsel'">未完成</button>
+            <a href="javascript:;" :style="judge?'':xiaosi" @click="deletecheck">清空所有</a>
+        </p>
+    </div>
+</body>
+<script>
+    JSON.parse(localStorage.getItem('text')) ? '' : localStorage.setItem('text', JSON.stringify([{
+        id: Date.now(),
+        text: 'www',
+        select: false,
+        genggai: false
+    }, {
+        id: Date.now()+1,
+        text: 'aaa',
+        select: false,
+        genggai: false
+    }]))
+    Vue.directive('focus', {
+        inserted: function (el) {
+            el.focus();
+        }
+    })
+
+    var vm = new Vue({
+        el: "#box",
+        data: {
+            str: '',
+            xiaosi: {
+                display: 'none',
+            },
+            change: 'all',
+            msg: JSON.parse(localStorage.getItem('text'))
+        },
+        //事件
+        methods: {
+            fn(index) {
+                if (this.msg[index].select) {
+                    return
+                } else {
+                    this.msg[index].genggai = true;
+                }
+            },
+            toggle() {
+                this.msg.forEach(item => {
+                    item.select = true;
+                })
+            },
+            add() {
+                if (!this.str) {
+                    return;
+                }
+                this.msg.push({
+                    id: Date.now() + 1,
+                    text: this.str,
+                    select: false,
+                    genggai: false
+                })
+                this.str = "";
+            },
+            deletecheck() {
+                this.msg = this.msg.filter(item => {
+                    return !item.select;
+                })
+            },
+            deletearr(item) {
+                this.msg = this.msg.filter(el => {
+                    if (item.id != el.id) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                })
+            },
+            contentupdata(event, item, index) {
+                if (event.keyCode == 13) {
+                    this.msg[index].text = event.target.value;
+                    this.msg[index].genggai = false;
+                } else if (event.keyCode == 27) {
+                    this.msg[index].text = this.msg[index].text;
+                    this.msg[index].genggai = false;
+                }
+            },
+            lostfocus(index) {
+                this.msg[index].genggai = false;
+            }
+        },
+        directive: {
+            focus: {
+                inserted: function (el) {
+                    el.focus();
+                }
+            }
+        },
+        computed: {
+            filtermsg() {
+                return this.msg.filter((item) => {
+                    if (this.change == 'all') {
+                        return true;
+                    } else if (this.change == 'select') {
+                        return item.select;
+                    } else if (this.change == 'unsel') {
+                        return !item.select;
+                    }
+                })
+            },
+            unselnum() {
+                return this.msg.filter((item) => !item.select).length;
+            },
+            judge() {
+                return this.msg.some(item => {
+                    return item.select;
+                })
+            }
+        }
+    })
+</script>
+
+</html>
