@@ -7,7 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <script src="https://cdn.bootcss.com/vue/2.6.10/vue.js"></script>
-    <link rel="stylesheet" href="./font_pxy1n5ws3x/iconfont.css">
+    <link rel="stylesheet" href="../day0101/font_pxy1n5ws3x/iconfont.css">
+    <!-- 还有对input 的checkbox事件监听   或者对对象变化的深度监控 -->
     <style>
         ul,
         li,
@@ -113,7 +114,7 @@
         select: false,
         genggai: false
     }, {
-        id: Date.now()+1,
+        id: Date.now() + 1,
         text: 'aaa',
         select: false,
         genggai: false
@@ -142,11 +143,13 @@
                 } else {
                     this.msg[index].genggai = true;
                 }
+                localStorage.setItem('text', JSON.stringify(this.msg));
             },
             toggle() {
                 this.msg.forEach(item => {
                     item.select = true;
                 })
+                localStorage.setItem('text', JSON.stringify(this.msg));
             },
             add() {
                 if (!this.str) {
@@ -158,12 +161,14 @@
                     select: false,
                     genggai: false
                 })
+                localStorage.setItem('text', JSON.stringify(this.msg));
                 this.str = "";
             },
             deletecheck() {
                 this.msg = this.msg.filter(item => {
                     return !item.select;
                 })
+                localStorage.setItem('text', JSON.stringify(this.msg));
             },
             deletearr(item) {
                 this.msg = this.msg.filter(el => {
@@ -173,6 +178,7 @@
                         return false;
                     }
                 })
+                localStorage.setItem('text', JSON.stringify(this.msg));
             },
             contentupdata(event, item, index) {
                 if (event.keyCode == 13) {
@@ -182,9 +188,11 @@
                     this.msg[index].text = this.msg[index].text;
                     this.msg[index].genggai = false;
                 }
+                localStorage.setItem('text', JSON.stringify(this.msg));
             },
             lostfocus(index) {
                 this.msg[index].genggai = false;
+                localStorage.setItem('text', JSON.stringify(this.msg));
             }
         },
         directive: {
