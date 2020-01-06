@@ -64,7 +64,7 @@ module.exports = {
         proxy:{
             "/my":{
                 target:"http://m.maoyan.com",
-                chageOrigin:true,
+                changeOrigin:true,
                 pathRewrite:{
                     "^/my":"/"
                 }
