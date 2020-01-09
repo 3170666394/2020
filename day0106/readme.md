@@ -60,7 +60,7 @@ Vue.config.js
 
 ```js
 module.exports = {
-    derServer:{
+    devServer:{
         proxy:{
             "/my":{
                 target:"http://m.maoyan.com",
